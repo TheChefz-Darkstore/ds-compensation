@@ -36,12 +36,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);}
 textarea{resize:vertical;min-height:70px;}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#2563eb);color:#fff;box-shadow:0 3px 12px rgba(59,130,246,.3);}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(59,130,246,.4);}
+.btn-primary:hover{transform:translateY(-1px);}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 .btn-success{background:linear-gradient(135deg,var(--success),#059669);color:#fff;}
 .btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:#fff;}
 .btn-purple{background:linear-gradient(135deg,var(--purple),#7c3aed);color:#fff;}
+.btn-warning{background:linear-gradient(135deg,var(--warning),#d97706);color:#fff;}
 .btn-full{width:100%;justify-content:center;}
 .btn:disabled{opacity:.4;pointer-events:none;}
 .upload-zone{border:2px dashed var(--border);border-radius:10px;padding:36px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
@@ -62,20 +63,16 @@ tr:hover td{background:rgba(59,130,246,.03);}
 .badge-done{background:rgba(16,185,129,.15);color:var(--success);}
 .badge-cancel{background:rgba(239,68,68,.12);color:var(--danger);}
 .badge-delivered{background:rgba(16,185,129,.12);color:var(--success);}
-.badge-approved{background:rgba(16,185,129,.15);color:var(--success);}
-.badge-rejected{background:rgba(239,68,68,.15);color:var(--danger);}
 .alert{padding:11px 14px;border-radius:8px;font-size:12px;margin-bottom:14px;}
 .alert-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;}
 .alert-success{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;}
 .alert-info{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:#93c5fd;}
-.alert-warning{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:#fcd34d;}
 .branch-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
 .branch-chip{background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:12px;font-weight:500;transition:all .18s;}
 .branch-chip:hover,.branch-chip.active{border-color:var(--accent);background:rgba(59,130,246,.1);color:var(--accent);}
 .chip-count{display:inline-block;background:rgba(59,130,246,.2);color:var(--accent);border-radius:20px;padding:1px 6px;font-size:9px;margin-right:4px;}
 .brand-section{margin-bottom:14px;}
 .brand-header{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px 8px 0 0;cursor:pointer;}
-.brand-header:hover{border-color:rgba(59,130,246,.4);}
 .brand-body{border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;}
 .inline-input{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:6px 9px;color:var(--text);font-family:inherit;font-size:11px;width:100%;transition:border-color .2s;}
 .inline-input:focus{border-color:var(--accent);outline:none;}
@@ -85,24 +82,21 @@ tr:hover td{background:rgba(59,130,246,.03);}
 .loading-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 44px;text-align:center;}
 .spinner{width:32px;height:32px;border:3px solid rgba(59,130,246,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* Comment bubble */
-.comment-bubble{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:8px;padding:8px 12px;margin-top:6px;font-size:11px;}
-.comment-bubble .cm-author{font-weight:600;color:var(--purple);font-size:10px;margin-bottom:3px;}
-.comment-bubble .cm-text{color:var(--text);}
-.comment-bubble .cm-time{color:var(--muted);font-size:9px;margin-top:2px;}
-
-/* Google Sheet sync bar */
+.comment-bubble{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:8px;padding:8px 12px;margin-top:4px;font-size:11px;}
+.comment-bubble .cm-author{font-weight:600;color:var(--purple);font-size:10px;margin-bottom:2px;}
 .sync-bar{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;}
 .sync-dot.live{background:var(--success);box-shadow:0 0 6px var(--success);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-
-/* Tabs */
-.tabs{display:flex;gap:2px;background:var(--surface2);border-radius:10px;padding:3px;margin-bottom:20px;}
-.tab{flex:1;padding:9px;border-radius:7px;text-align:center;cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:all .2s;}
-.tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3);}
-
+/* Settings */
+.settings-section{margin-bottom:24px;}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap;}
+.settings-row:last-child{border-bottom:none;}
+.settings-label{font-size:13px;font-weight:500;}
+.settings-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+/* Link style */
+.link-cell a{color:var(--accent);text-decoration:none;font-size:11px;}
+.link-cell a:hover{text-decoration:underline;}
 @media(max-width:600px){.role-grid{grid-template-columns:1fr}.screen{padding:18px 12px}header{padding:12px}.hero h1{font-size:22px}}
 </style>
 </head>
@@ -110,23 +104,21 @@ tr:hover td{background:rgba(59,130,246,.03);}
 <div class="page">
 
 <div class="loading-overlay" id="loading-overlay">
-  <div class="loading-box">
-    <div class="spinner"></div>
-    <div style="font-size:13px;color:var(--muted);" id="loading-text">جاري الاتصال...</div>
-  </div>
+  <div class="loading-box"><div class="spinner"></div><div style="font-size:13px;color:var(--muted);" id="loading-text">جاري الاتصال...</div></div>
 </div>
 
 <header>
-  <div class="logo"><div class="logo-dot">📦</div>DS Compensation Portal</div>
+  <div class="logo"><div class="logo-dot">📦</div><span id="site-title">DS Compensation Portal</span></div>
   <div style="display:flex;align-items:center;gap:8px;">
     <span id="sync-badge" style="font-size:10px;color:var(--success);display:none;">🟢 متصل</span>
-    <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px;" onclick="goHome()">🏠 الرئيسية</button>
+    <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px;" onclick="show('screen-settings-login')">⚙️</button>
+    <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px;" onclick="goHome()">🏠</button>
   </div>
 </header>
 
 <!-- HOME -->
 <div id="screen-home" class="screen active">
-  <div class="hero"><h1>بوابة التعويضات</h1><p>DS Compensation Report 2026</p></div>
+  <div class="hero"><h1 id="home-title">بوابة التعويضات</h1><p id="home-sub">DS Compensation Report 2026</p></div>
   <div id="home-banner" style="display:none;margin-top:16px;"></div>
   <div class="role-grid">
     <div class="role-card" onclick="show('screen-manager-login')">
@@ -137,7 +129,7 @@ tr:hover td{background:rgba(59,130,246,.03);}
     <div class="role-card" onclick="show('screen-am-login')">
       <span class="role-icon">📊</span>
       <div class="role-title">مدير الحسابات</div>
-      <div class="role-desc">مراجعة النتائج والتعليق على الطلبات</div>
+      <div class="role-desc">مراجعة النتائج والتعليق</div>
     </div>
     <div class="role-card" onclick="show('screen-employee-login')">
       <span class="role-icon">🏪</span>
@@ -152,9 +144,8 @@ tr:hover td{background:rgba(59,130,246,.03);}
   <div class="card" style="max-width:380px;margin:44px auto;">
     <div class="card-title">دخول المدير</div>
     <div id="mgr-err" class="alert alert-error" style="display:none"></div>
-    <div class="field"><label>كلمة السر</label><input type="password" id="mgr-pass" placeholder="admin123" onkeydown="if(event.key==='Enter')mgrLogin()"></div>
+    <div class="field"><label>كلمة السر</label><input type="password" id="mgr-pass" onkeydown="if(event.key==='Enter')mgrLogin()"></div>
     <button class="btn btn-primary btn-full" onclick="mgrLogin()">دخول</button>
-    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:12px;">الافتراضية: <b style="color:var(--accent)">admin123</b></p>
   </div>
 </div>
 
@@ -163,10 +154,104 @@ tr:hover td{background:rgba(59,130,246,.03);}
   <div class="card" style="max-width:380px;margin:44px auto;">
     <div class="card-title">دخول مدير الحسابات</div>
     <div id="am-err" class="alert alert-error" style="display:none"></div>
-    <div class="field"><label>كلمة السر</label><input type="password" id="am-pass" placeholder="am123" onkeydown="if(event.key==='Enter')amLogin()"></div>
+    <div class="field"><label>كلمة السر</label><input type="password" id="am-pass" onkeydown="if(event.key==='Enter')amLogin()"></div>
     <button class="btn btn-purple btn-full" onclick="amLogin()">دخول</button>
-    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:12px;">الافتراضية: <b style="color:var(--purple)">am123</b></p>
   </div>
+</div>
+
+<!-- SETTINGS LOGIN -->
+<div id="screen-settings-login" class="screen">
+  <div class="card" style="max-width:380px;margin:44px auto;">
+    <div class="card-title">⚙️ دخول الإعدادات</div>
+    <div id="set-err" class="alert alert-error" style="display:none"></div>
+    <div class="field"><label>كلمة سر الإعدادات</label><input type="password" id="set-pass" onkeydown="if(event.key==='Enter')settingsLogin()"></div>
+    <button class="btn btn-warning btn-full" onclick="settingsLogin()">دخول</button>
+    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:12px;">الافتراضية: <b style="color:var(--warning)">settings123</b></p>
+  </div>
+</div>
+
+<!-- SETTINGS DASHBOARD -->
+<div id="screen-settings" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+    <h2 style="font-size:19px;font-weight:700;">⚙️ الإعدادات</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔐 كلمات السر</div>
+    <div class="settings-section">
+      <div class="settings-row">
+        <div><div class="settings-label">كلمة سر المدير</div><div class="settings-desc">للدخول للوحة المدير</div></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" id="set-mgr-pass" style="width:160px;" placeholder="admin123">
+          <button class="btn btn-primary" style="padding:8px 14px;font-size:11px;" onclick="saveSetting('mgrPass','set-mgr-pass')">حفظ</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">كلمة سر مدير الحسابات</div><div class="settings-desc">للدخول للوحة AM</div></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" id="set-am-pass" style="width:160px;" placeholder="am123">
+          <button class="btn btn-purple" style="padding:8px 14px;font-size:11px;" onclick="saveSetting('amPass','set-am-pass')">حفظ</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">كلمة سر الإعدادات</div><div class="settings-desc">لهذه الصفحة</div></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" id="set-settings-pass" style="width:160px;" placeholder="settings123">
+          <button class="btn btn-warning" style="padding:8px 14px;font-size:11px;" onclick="saveSetting('settingsPass','set-settings-pass')">حفظ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🌐 تخصيص الموقع</div>
+    <div class="settings-section">
+      <div class="settings-row">
+        <div><div class="settings-label">اسم الموقع</div><div class="settings-desc">يظهر في الهيدر والصفحة الرئيسية</div></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" id="set-site-title" style="width:200px;" placeholder="DS Compensation Portal">
+          <button class="btn btn-primary" style="padding:8px 14px;font-size:11px;" onclick="saveSetting('siteTitle','set-site-title');applySettings()">حفظ</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">العنوان الفرعي</div><div class="settings-desc">يظهر تحت العنوان الرئيسي</div></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" id="set-site-sub" style="width:200px;" placeholder="DS Compensation Report 2026">
+          <button class="btn btn-primary" style="padding:8px 14px;font-size:11px;" onclick="saveSetting('siteSub','set-site-sub');applySettings()">حفظ</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">اللغة</div><div class="settings-desc">لغة الواجهة</div></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select id="set-lang" style="width:160px;">
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+          </select>
+          <button class="btn btn-primary" style="padding:8px 14px;font-size:11px;" onclick="saveSetting('lang','set-lang')">حفظ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📅 تنسيق التاريخ</div>
+    <div class="settings-section">
+      <div class="settings-row">
+        <div><div class="settings-label">صيغة التاريخ</div><div class="settings-desc">كيف يظهر التاريخ في الجداول</div></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select id="set-date-format" style="width:200px;">
+            <option value="short">قصير (1/5/2026)</option>
+            <option value="long">طويل (1 مايو 2026)</option>
+            <option value="numeric">رقمي (2026-05-01)</option>
+            <option value="raw">كما هو في الشيت</option>
+          </select>
+          <button class="btn btn-primary" style="padding:8px 14px;font-size:11px;" onclick="saveSetting('dateFormat','set-date-format')">حفظ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="settings-saved" class="alert alert-success" style="display:none;">✅ تم الحفظ!</div>
 </div>
 
 <!-- MANAGER DASHBOARD -->
@@ -179,33 +264,24 @@ tr:hover td{background:rgba(59,130,246,.03);}
     </div>
   </div>
 
-  <!-- Google Sheet Sync -->
   <div class="card">
-    <div class="card-title">🔗 ربط Google Sheet (مزامنة تلقائية)</div>
-    <div class="sync-bar" id="gs-sync-bar">
+    <div class="card-title">🔗 ربط Google Sheet</div>
+    <div class="sync-bar">
       <div class="sync-dot" id="gs-dot"></div>
-      <div style="flex:1;">
-        <div style="font-size:12px;font-weight:600;" id="gs-status-text">لا يوجد ربط</div>
-        <div style="font-size:10px;color:var(--muted);" id="gs-last-sync"></div>
-      </div>
+      <div style="flex:1;"><div style="font-size:12px;font-weight:600;" id="gs-status-text">لا يوجد ربط</div><div style="font-size:10px;color:var(--muted);" id="gs-last-sync"></div></div>
       <button class="btn btn-ghost" style="font-size:11px;padding:7px 12px;" onclick="toggleGsPanel()">⚙️ إعداد</button>
-      <button class="btn btn-success" id="btn-sync-now" style="font-size:11px;padding:7px 12px;display:none;" onclick="syncGoogleSheet()">🔄 مزامنة الآن</button>
+      <button class="btn btn-success" id="btn-sync-now" style="font-size:11px;padding:7px 12px;display:none;" onclick="syncGoogleSheet()">🔄 مزامنة</button>
     </div>
     <div id="gs-panel" style="display:none;margin-top:14px;">
-      <div class="alert alert-info" style="margin-bottom:12px;">
-        📋 <strong>كيف تحصل على رابط CSV:</strong> في Google Sheet ← File ← Share ← Publish to web ← اختر الشيت ← CSV ← Publish ← انسخ الرابط
-      </div>
+      <div class="alert alert-info" style="margin-bottom:12px;">📋 في Google Sheet ← File ← Share ← Publish to web ← اختر الشيت ← CSV ← Publish ← انسخ الرابط</div>
       <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
-        <div class="field" style="flex:1;margin:0;">
-          <label>رابط Google Sheet (CSV)</label>
-          <input type="text" id="gs-url" placeholder="https://docs.google.com/spreadsheets/d/.../export?format=csv">
-        </div>
+        <div class="field" style="flex:1;margin:0;"><label>رابط Google Sheet (CSV)</label><input type="text" id="gs-url" placeholder="https://docs.google.com/..."></div>
         <button class="btn btn-primary" style="font-size:12px;" onclick="connectGoogleSheet()">ربط</button>
       </div>
       <div style="display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;">
         <label style="margin:0;display:flex;align-items:center;gap:6px;cursor:pointer;">
           <input type="checkbox" id="gs-auto" style="width:auto;" onchange="toggleAutoSync()">
-          <span style="font-size:12px;color:var(--text);">مزامنة تلقائية كل</span>
+          <span style="font-size:12px;">مزامنة تلقائية كل</span>
         </label>
         <select id="gs-interval" style="width:auto;font-size:12px;padding:6px 10px;" onchange="updateInterval()">
           <option value="60000">دقيقة</option>
@@ -217,13 +293,12 @@ tr:hover td{background:rgba(59,130,246,.03);}
     </div>
   </div>
 
-  <!-- Manual Upload -->
   <div class="card">
     <div class="card-title" id="upload-label">أو رفع شيت يدوي</div>
     <div class="upload-zone">
       <input type="file" accept=".xlsx,.xls,.csv" onchange="handleFile(event)">
       <div style="font-size:28px;margin-bottom:8px;">📊</div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:4px;">اسحب الشيت هنا أو اضغط للاختيار</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:4px;">اسحب الشيت هنا أو اضغط</div>
       <div style="font-size:11px;color:var(--muted);">xlsx · xls · csv</div>
     </div>
     <div id="upload-msg" style="margin-top:12px;"></div>
@@ -249,9 +324,7 @@ tr:hover td{background:rgba(59,130,246,.03);}
           <th>#</th><th>Order ID</th><th>الفرع</th><th>البراند</th><th>التاريخ</th>
           <th>Order Status</th><th>القيمة</th><th>%</th><th>Comp Status</th>
           <th>التبرير</th><th>الدليل</th><th>تعليق AM</th><th>المعالجة</th>
-        </tr></thead>
-          <tbody id="mgr-tbody"></tbody>
-        </table>
+        </tr></thead><tbody id="mgr-tbody"></tbody></table>
       </div>
     </div>
   </div>
@@ -260,21 +333,17 @@ tr:hover td{background:rgba(59,130,246,.03);}
 <!-- AM DASHBOARD -->
 <div id="screen-am" class="screen">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;">
-    <div><h2 style="font-size:19px;font-weight:700;">لوحة مدير الحسابات</h2><p style="color:var(--muted);font-size:11px;margin-top:2px;">مراجعة التبريرات والتعليق عليها</p></div>
+    <div><h2 style="font-size:19px;font-weight:700;">لوحة مدير الحسابات</h2></div>
   </div>
-
   <div class="stats-row" style="grid-template-columns:repeat(4,1fr);" id="am-stats-row"></div>
-
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
       <div class="card-title" style="margin:0;">الطلبات</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <select id="am-branch-filter" onchange="renderAmTable()" style="max-width:160px;font-size:12px;">
-          <option value="">كل الفروع</option>
-        </select>
+        <select id="am-branch-filter" onchange="renderAmTable()" style="max-width:160px;font-size:12px;"><option value="">كل الفروع</option></select>
         <select id="am-status-filter" onchange="renderAmTable()" style="max-width:150px;font-size:12px;">
           <option value="">كل الحالات</option>
-          <option value="done">مكتمل (لديه تبرير)</option>
+          <option value="done">لديه تبرير</option>
           <option value="pending">في الانتظار</option>
           <option value="commented">علّقت عليه</option>
         </select>
@@ -284,9 +353,7 @@ tr:hover td{background:rgba(59,130,246,.03);}
       <table><thead><tr>
         <th>#</th><th>Order ID</th><th>الفرع</th><th>البراند</th><th>التاريخ</th>
         <th>Order Status</th><th>القيمة</th><th>%</th><th>التبرير</th><th>الدليل</th><th>تعليقي</th><th>إجراء</th>
-      </tr></thead>
-        <tbody id="am-tbody"></tbody>
-      </table>
+      </tr></thead><tbody id="am-tbody"></tbody></table>
     </div>
   </div>
 </div>
@@ -330,6 +397,58 @@ const sb={
   async del(t,q){await fetch(`${SB_URL}/rest/v1/${t}?${q}`,{method:'DELETE',headers:SBH.headers});}
 };
 
+// ─── SETTINGS ────────────────────────────────────────────
+let cfg={
+  mgrPass:'admin123',amPass:'am123',settingsPass:'settings123',
+  siteTitle:'DS Compensation Portal',siteSub:'DS Compensation Report 2026',
+  lang:'ar',dateFormat:'short'
+};
+
+function loadCfg(){try{const s=localStorage.getItem('ds_cfg');if(s)cfg={...cfg,...JSON.parse(s)};}catch(e){}}
+function saveCfg(){localStorage.setItem('ds_cfg',JSON.stringify(cfg));}
+function saveSetting(key,inputId){
+  const val=document.getElementById(inputId).value.trim();
+  if(!val)return;
+  cfg[key]=val;saveCfg();
+  const msg=document.getElementById('settings-saved');
+  msg.style.display='';setTimeout(()=>msg.style.display='none',2000);
+}
+function applySettings(){
+  document.getElementById('site-title').textContent=cfg.siteTitle;
+  document.getElementById('home-title').textContent=cfg.siteTitle;
+  document.getElementById('home-sub').textContent=cfg.siteSub;
+  document.title=cfg.siteTitle;
+  // populate inputs
+  document.getElementById('set-mgr-pass').value=cfg.mgrPass;
+  document.getElementById('set-am-pass').value=cfg.amPass;
+  document.getElementById('set-settings-pass').value=cfg.settingsPass;
+  document.getElementById('set-site-title').value=cfg.siteTitle;
+  document.getElementById('set-site-sub').value=cfg.siteSub;
+  document.getElementById('set-lang').value=cfg.lang;
+  document.getElementById('set-date-format').value=cfg.dateFormat;
+  // RTL/LTR
+  document.documentElement.dir=cfg.lang==='en'?'ltr':'rtl';
+}
+
+function formatDate(raw){
+  if(!raw||raw==='')return'-';
+  if(cfg.dateFormat==='raw')return String(raw);
+  // try parse
+  let d;
+  // Excel serial number
+  if(typeof raw==='number'){
+    d=new Date(Math.round((raw-25569)*86400*1000));
+  } else {
+    d=new Date(raw);
+  }
+  if(isNaN(d.getTime()))return String(raw);
+  try{
+    if(cfg.dateFormat==='numeric')return d.toISOString().slice(0,10);
+    if(cfg.dateFormat==='long')return d.toLocaleDateString(cfg.lang==='ar'?'ar-SA':'en-US',{year:'numeric',month:'long',day:'numeric'});
+    return d.toLocaleDateString(cfg.lang==='ar'?'ar-SA':'en-US',{year:'numeric',month:'numeric',day:'numeric'});
+  }catch(e){return String(raw);}
+}
+
 // ─── STATE ────────────────────────────────────────────────
 let allRows=[],sheetHeaders=[],colMap={};
 let branchData={};
@@ -338,26 +457,17 @@ let gsUrl='',gsTimer=null;
 
 // ─── INIT ─────────────────────────────────────────────────
 window.addEventListener('load',async()=>{
+  loadCfg();applySettings();
   setLoad('جاري الاتصال...');
-  try{
-    await loadSheet();
-    // restore gs url
-    const gsSaved=await sb.get('ds_sheet','order=id.desc&limit=1');
-    if(gsSaved&&gsSaved[0]&&gsSaved[0].gs_url){
-      gsUrl=gsSaved[0].gs_url;
-      document.getElementById('gs-url').value=gsUrl;
-      updateSyncBar(true);
-    }
-    document.getElementById('sync-badge').style.display='';
-  }catch(e){console.error(e);}
+  try{await loadSheet();document.getElementById('sync-badge').style.display='';}catch(e){console.error(e);}
   hideLoad();
 });
 
 async function loadSheet(){
   const rows=await sb.get('ds_sheet','order=id.desc&limit=1');
   if(!rows||!rows.length)return;
-  const s=rows[0]; sheetId=s.id; sheetHeaders=s.headers; allRows=s.rows;
-  if(s.gs_url){gsUrl=s.gs_url;}
+  const s=rows[0];sheetId=s.id;sheetHeaders=s.headers;allRows=s.rows;
+  if(s.gs_url){gsUrl=s.gs_url;document.getElementById('gs-url').value=gsUrl;updateSyncBar(true);}
   detectCols();
   const entries=await sb.get('ds_entries','order=row_idx.asc');
   buildBranchData();
@@ -366,18 +476,17 @@ async function loadSheet(){
       const b=e.branch,br=e.brand;
       if(!branchData[b]||!branchData[b][br])return;
       const f=branchData[b][br].find(x=>x.rowIdx===e.row_idx);
-      if(f){f.justification=e.justification||'';f.evidenceName=e.evidence_name||'';f.done=e.done||false;f.dbId=e.id;f.amComment=e.am_comment||'';f.amStatus=e.am_status||'';}
+      if(f){f.justification=e.justification||'';f.evidenceName=e.evidence_name||'';f.evidenceUrl=e.evidence_url||'';f.done=e.done||false;f.dbId=e.id;f.amComment=e.am_comment||'';}
     });
   }
-  const now=new Date(s.uploaded_at).toLocaleDateString('ar-SA');
-  document.getElementById('home-banner').innerHTML=`<div class="alert alert-success">✅ <strong>${s.filename||'Google Sheet'}</strong> — ${allRows.length} طلب — ${now}</div>`;
+  const now=formatDate(s.uploaded_at?new Date(s.uploaded_at):new Date());
+  document.getElementById('home-banner').innerHTML=`<div class="alert alert-success">✅ <strong>${s.filename||'Google Sheet'}</strong> — ${allRows.length} طلب</div>`;
   document.getElementById('home-banner').style.display='';
   document.getElementById('mgr-sheet-info').textContent=`${s.filename||'Google Sheet'} · ${allRows.length} طلب`;
   document.getElementById('mgr-content').style.display='';
   document.getElementById('btn-dl').style.display='';
   document.getElementById('btn-clear').style.display='';
-  refreshMgrView();
-  populateAmBranchFilter();
+  refreshMgrView();populateAmBranchFilter();
 }
 
 // ─── NAV ──────────────────────────────────────────────────
@@ -387,75 +496,40 @@ function setLoad(t){document.getElementById('loading-text').textContent=t;docume
 function hideLoad(){document.getElementById('loading-overlay').style.display='none';}
 
 // ─── LOGINS ───────────────────────────────────────────────
-function mgrLogin(){const p=document.getElementById('mgr-pass').value,e=document.getElementById('mgr-err');if(p!=='admin123'){e.textContent='❌ كلمة السر خاطئة';e.style.display='';return;}e.style.display='none';show('screen-manager');}
-function amLogin(){const p=document.getElementById('am-pass').value,e=document.getElementById('am-err');if(p!=='am123'){e.textContent='❌ كلمة السر خاطئة';e.style.display='';return;}e.style.display='none';renderAmDashboard();show('screen-am');}
+function mgrLogin(){const p=document.getElementById('mgr-pass').value,e=document.getElementById('mgr-err');if(p!==cfg.mgrPass){e.textContent='❌ كلمة السر خاطئة';e.style.display='';return;}e.style.display='none';show('screen-manager');}
+function amLogin(){const p=document.getElementById('am-pass').value,e=document.getElementById('am-err');if(p!==cfg.amPass){e.textContent='❌ كلمة السر خاطئة';e.style.display='';return;}e.style.display='none';renderAmDashboard();show('screen-am');}
+function settingsLogin(){const p=document.getElementById('set-pass').value,e=document.getElementById('set-err');if(p!==cfg.settingsPass){e.textContent='❌ كلمة السر خاطئة';e.style.display='';return;}e.style.display='none';applySettings();show('screen-settings');}
 
-// ─── GOOGLE SHEET SYNC ────────────────────────────────────
+// ─── GOOGLE SHEET ─────────────────────────────────────────
 function toggleGsPanel(){const p=document.getElementById('gs-panel');p.style.display=p.style.display==='none'?'':'none';}
-
-async function connectGoogleSheet(){
-  const url=document.getElementById('gs-url').value.trim();
-  if(!url){alert('❗ ادخل الرابط');return;}
-  gsUrl=url;
-  await syncGoogleSheet();
-}
-
+async function connectGoogleSheet(){const url=document.getElementById('gs-url').value.trim();if(!url){alert('❗ ادخل الرابط');return;}gsUrl=url;await syncGoogleSheet();}
 async function syncGoogleSheet(){
-  if(!gsUrl)return;
-  setLoad('جاري المزامنة مع Google Sheet...');
+  if(!gsUrl)return;setLoad('جاري المزامنة...');
   try{
-    const resp=await fetch(gsUrl);
-    if(!resp.ok)throw new Error('تعذّر الاتصال بالشيت');
-    const csv=await resp.text();
-    parseCSVAndLoad(csv,'Google Sheet');
-    updateSyncBar(true);
-    document.getElementById('gs-last-sync').textContent='آخر مزامنة: '+new Date().toLocaleTimeString('ar-SA');
+    const resp=await fetch(gsUrl);if(!resp.ok)throw new Error('تعذّر الاتصال');
+    const csv=await resp.text();parseCSVAndLoad(csv,'Google Sheet');
+    updateSyncBar(true);document.getElementById('gs-last-sync').textContent='آخر مزامنة: '+new Date().toLocaleTimeString('ar-SA');
     document.getElementById('btn-sync-now').style.display='';
-  }catch(e){
-    hideLoad();
-    alert('❌ خطأ في المزامنة: '+e.message+'\n\nتأكد أن الشيت منشور (Published to web)');
-    return;
-  }
+  }catch(e){hideLoad();alert('❌ '+e.message);return;}
   hideLoad();
 }
-
-function toggleAutoSync(){
-  const on=document.getElementById('gs-auto').checked;
-  if(gsTimer){clearInterval(gsTimer);gsTimer=null;}
-  if(on&&gsUrl){
-    const interval=parseInt(document.getElementById('gs-interval').value);
-    gsTimer=setInterval(syncGoogleSheet,interval);
-  }
-}
-
+function toggleAutoSync(){const on=document.getElementById('gs-auto').checked;if(gsTimer){clearInterval(gsTimer);gsTimer=null;}if(on&&gsUrl){const iv=parseInt(document.getElementById('gs-interval').value);gsTimer=setInterval(syncGoogleSheet,iv);}}
 function updateInterval(){if(document.getElementById('gs-auto').checked){toggleAutoSync();toggleAutoSync();}}
-
-function updateSyncBar(connected){
-  document.getElementById('gs-dot').className='sync-dot'+(connected?' live':'');
-  document.getElementById('gs-status-text').textContent=connected?`مرتبط بـ Google Sheet`:'لا يوجد ربط';
-  if(connected)document.getElementById('btn-sync-now').style.display='';
-}
+function updateSyncBar(c){document.getElementById('gs-dot').className='sync-dot'+(c?' live':'');document.getElementById('gs-status-text').textContent=c?'مرتبط بـ Google Sheet':'لا يوجد ربط';if(c)document.getElementById('btn-sync-now').style.display='';}
 
 function parseCSVAndLoad(csv,filename){
-  const lines=csv.split('\n').filter(l=>l.trim());
-  if(lines.length<2)throw new Error('البيانات فارغة');
-  const parseRow=line=>{const r=[];let cur='',inQ=false;for(let c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){r.push(cur.trim());cur='';}else cur+=c;}r.push(cur.trim());return r;};
-  sheetHeaders=parseRow(lines[0]);
-  allRows=lines.slice(1).map(l=>parseRow(l)).filter(r=>r.some(c=>c!==''));
-  detectCols();
-  buildBranchData();
-  saveSheetToSupabase(filename);
+  const lines=csv.split('\n').filter(l=>l.trim());if(lines.length<2)throw new Error('فارغ');
+  const pr=l=>{const r=[];let c='',q=false;for(let ch of l){if(ch==='"')q=!q;else if(ch===','&&!q){r.push(c.trim());c='';}else c+=ch;}r.push(c.trim());return r;};
+  sheetHeaders=pr(lines[0]);allRows=lines.slice(1).map(l=>pr(l)).filter(r=>r.some(c=>c!==''));
+  detectCols();buildBranchData();saveSheetToSupabase(filename);
 }
 
 async function saveSheetToSupabase(filename){
-  if(sheetId){
-    await sb.del('ds_entries','row_idx=gte.0');
-    await sb.del('ds_sheet',`id=eq.${sheetId}`);
-  }
+  if(sheetId){await sb.del('ds_entries','row_idx=gte.0');await sb.del('ds_sheet',`id=eq.${sheetId}`);}
   const ins=await sb.post('ds_sheet',{filename,headers:sheetHeaders,rows:allRows,gs_url:gsUrl});
   sheetId=ins[0]?.id;
   const arr=[];
-  Object.keys(branchData).forEach(branch=>Object.keys(branchData[branch]).forEach(brand=>branchData[branch][brand].forEach(e=>arr.push({row_idx:e.rowIdx,branch,brand,justification:'',evidence_name:'',done:false,am_comment:'',am_status:''}))));
+  Object.keys(branchData).forEach(branch=>Object.keys(branchData[branch]).forEach(brand=>branchData[branch][brand].forEach(e=>arr.push({row_idx:e.rowIdx,branch,brand,justification:'',evidence_name:'',evidence_url:'',done:false,am_comment:''}))));
   if(arr.length)await sb.post('ds_entries',arr,'');
   document.getElementById('mgr-sheet-info').textContent=`${filename} · ${allRows.length} طلب`;
   document.getElementById('mgr-content').style.display='';
@@ -464,15 +538,13 @@ async function saveSheetToSupabase(filename){
   document.getElementById('home-banner').innerHTML=`<div class="alert alert-success">✅ <strong>${filename}</strong> — ${allRows.length} طلب</div>`;
   document.getElementById('home-banner').style.display='';
   document.getElementById('sync-badge').style.display='';
-  refreshMgrView();
-  populateAmBranchFilter();
+  refreshMgrView();populateAmBranchFilter();
 }
 
 // ─── FILE UPLOAD ──────────────────────────────────────────
 function handleFile(e){
   const file=e.target.files[0];if(!file)return;
-  const msg=document.getElementById('upload-msg');
-  msg.innerHTML='<div class="alert alert-info">⏳ جاري القراءة...</div>';
+  const msg=document.getElementById('upload-msg');msg.innerHTML='<div class="alert alert-info">⏳ جاري القراءة...</div>';
   const reader=new FileReader();
   reader.onload=async ev=>{
     try{
@@ -480,13 +552,10 @@ function handleFile(e){
       const ws=wb.Sheets[wb.SheetNames[0]];
       const json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
       if(json.length<2)throw new Error('الشيت فارغ');
-      sheetHeaders=json[0].map(h=>String(h).trim());
-      allRows=json.slice(1).filter(r=>r.some(c=>c!==''));
-      detectCols(); buildBranchData();
-      msg.innerHTML='<div class="alert alert-info">⏳ جاري الحفظ...</div>';
-      setLoad('جاري الحفظ...');
-      await saveSheetToSupabase(file.name);
-      hideLoad();
+      sheetHeaders=json[0].map(h=>String(h).trim());allRows=json.slice(1).filter(r=>r.some(c=>c!==''));
+      detectCols();buildBranchData();
+      msg.innerHTML='<div class="alert alert-info">⏳ جاري الحفظ...</div>';setLoad('جاري الحفظ...');
+      await saveSheetToSupabase(file.name);hideLoad();
       msg.innerHTML=`<div class="alert alert-success">✅ تم — ${allRows.length} طلب</div>`;
     }catch(err){hideLoad();msg.innerHTML=`<div class="alert alert-error">❌ ${err.message}</div>`;}
   };
@@ -516,18 +585,25 @@ function detectCols(){
 function buildBranchData(){
   branchData={};
   allRows.forEach((row,idx)=>{
-    const branch=String(row[colMap.branch]||'').trim();
-    const brand=String(row[colMap.brand]||'').trim();
+    const branch=String(row[colMap.branch]||'').trim(),brand=String(row[colMap.brand]||'').trim();
     if(!branch)return;
     if(!branchData[branch])branchData[branch]={};
     if(!branchData[branch][brand])branchData[branch][brand]=[];
-    branchData[branch][brand].push({rowIdx:idx,justification:'',evidenceName:'',done:false,dbId:null,amComment:'',amStatus:''});
+    branchData[branch][brand].push({rowIdx:idx,justification:'',evidenceName:'',evidenceUrl:'',done:false,dbId:null,amComment:''});
   });
+}
+
+// helper: render evidence cell (link or file)
+function renderEvidenceCell(entry){
+  if(!entry.evidenceUrl&&!entry.evidenceName)return '-';
+  const url=entry.evidenceUrl;
+  const name=entry.evidenceName||'دليل';
+  if(url){return `<div class="link-cell"><a href="${url}" target="_blank">📎 ${name}</a></div>`;}
+  return `<span style="color:var(--success);font-size:11px">📎 ${name}</span>`;
 }
 
 // ─── MANAGER VIEW ─────────────────────────────────────────
 function refreshMgrView(){renderMgrStats();renderMgrBranchChips();renderMgrTable();}
-
 function renderMgrStats(){
   let total=0,done=0;
   Object.values(branchData).forEach(b=>Object.values(b).forEach(e=>e.forEach(x=>{total++;if(x.done)done++;})));
@@ -537,7 +613,6 @@ function renderMgrStats(){
     <div class="stat-card"><div class="stat-val" style="color:var(--warning)">${total-done}</div><div class="stat-label">انتظار</div></div>
     <div class="stat-card"><div class="stat-val" style="color:var(--accent2)">${Object.keys(branchData).length}</div><div class="stat-label">فروع</div></div>`;
 }
-
 function renderMgrBranchChips(){
   const w=document.getElementById('mgr-branch-chips');
   w.innerHTML=`<div class="branch-chip ${!mgrSelBranch?'active':''}" onclick="mgrSel('')">الكل</div>`;
@@ -548,7 +623,6 @@ function renderMgrBranchChips(){
   });
 }
 function mgrSel(b){mgrSelBranch=b;renderMgrBranchChips();renderMgrTable();}
-
 function renderMgrTable(){
   const sf=document.getElementById('mgr-status-filter').value;
   const tb=document.getElementById('mgr-tbody');tb.innerHTML='';let idx=1;
@@ -560,26 +634,23 @@ function renderMgrTable(){
     tr.innerHTML=`
       <td style="color:var(--muted)">${idx++}</td>
       <td><strong>${row[colMap.orderId]||'-'}</strong></td>
-      <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${branch}</td>
-      <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${brand}</td>
-      <td style="color:var(--muted);white-space:nowrap">${row[colMap.createdOn]||'-'}</td>
+      <td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${branch}</td>
+      <td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${brand}</td>
+      <td style="white-space:nowrap">${formatDate(row[colMap.createdOn])}</td>
       <td><span class="badge ${os==='Cancel'?'badge-cancel':os==='Delivered'?'badge-delivered':'badge-pending'}">${os||'-'}</span></td>
       <td style="font-weight:600">${row[colMap.value]||'-'}</td>
-      <td style="color:${pct<0?'var(--danger)':'var(--success)'}">${pct!==''?pct+'%':'-'}</td>
+      <td style="color:${String(pct).includes('-')?'var(--danger)':'var(--success)'}">${pct!==''?pct+'%':'-'}</td>
       <td>${cs||'-'}</td>
       <td style="max-width:150px;color:${entry.justification?'var(--text)':'var(--muted)'}">${entry.justification||'<em>لم يُضف</em>'}</td>
-      <td>${entry.evidenceName?`<span style="color:var(--success)">📎 ${entry.evidenceName}</span>`:'-'}</td>
+      <td>${renderEvidenceCell(entry)}</td>
       <td>${entry.amComment?`<div class="comment-bubble"><div class="cm-author">💬 AM</div><div class="cm-text">${entry.amComment}</div></div>`:'-'}</td>
       <td><span class="badge ${entry.done?'badge-done':'badge-pending'}">${entry.done?'✓ مكتمل':'انتظار'}</span></td>`;
     tb.appendChild(tr);
   })));
 }
-
 async function clearData(){
-  if(!confirm('مسح كل البيانات؟'))return;
-  setLoad('جاري المسح...');
-  await sb.del('ds_entries','row_idx=gte.0');
-  if(sheetId)await sb.del('ds_sheet',`id=eq.${sheetId}`);
+  if(!confirm('مسح كل البيانات؟'))return;setLoad('جاري المسح...');
+  await sb.del('ds_entries','row_idx=gte.0');if(sheetId)await sb.del('ds_sheet',`id=eq.${sheetId}`);
   allRows=[];sheetHeaders=[];branchData={};sheetId=null;gsUrl='';
   if(gsTimer){clearInterval(gsTimer);gsTimer=null;}
   document.getElementById('mgr-content').style.display='none';
@@ -589,21 +660,17 @@ async function clearData(){
   document.getElementById('mgr-sheet-info').textContent='لا يوجد شيت';
   document.getElementById('upload-msg').innerHTML='<div class="alert alert-info">🗑️ تم المسح</div>';
   document.getElementById('sync-badge').style.display='none';
-  document.getElementById('gs-url').value='';
-  updateSyncBar(false);
-  hideLoad();
+  document.getElementById('gs-url').value='';updateSyncBar(false);hideLoad();
 }
 
 // ─── AM DASHBOARD ─────────────────────────────────────────
 function populateAmBranchFilter(){
-  const sel=document.getElementById('am-branch-filter');
-  sel.innerHTML='<option value="">كل الفروع</option>';
+  const sel=document.getElementById('am-branch-filter');sel.innerHTML='<option value="">كل الفروع</option>';
   Object.keys(branchData).sort().forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;sel.appendChild(o);});
 }
-
 function renderAmDashboard(){
-  let total=0,done=0,commented=0,withComment=0;
-  Object.values(branchData).forEach(b=>Object.values(b).forEach(e=>e.forEach(x=>{total++;if(x.done)done++;if(x.amComment)commented++;if(x.amStatus==='approved'||x.amStatus==='rejected')withComment++;})));
+  let total=0,done=0,commented=0;
+  Object.values(branchData).forEach(b=>Object.values(b).forEach(e=>e.forEach(x=>{total++;if(x.done)done++;if(x.amComment)commented++;})));
   document.getElementById('am-stats-row').innerHTML=`
     <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-label">إجمالي</div></div>
     <div class="stat-card"><div class="stat-val" style="color:var(--success)">${done}</div><div class="stat-label">لديه تبرير</div></div>
@@ -611,77 +678,58 @@ function renderAmDashboard(){
     <div class="stat-card"><div class="stat-val" style="color:var(--warning)">${total-done}</div><div class="stat-label">بدون تبرير</div></div>`;
   renderAmTable();
 }
-
 function renderAmTable(){
-  const bf=document.getElementById('am-branch-filter').value;
-  const sf=document.getElementById('am-status-filter').value;
+  const bf=document.getElementById('am-branch-filter').value,sf=document.getElementById('am-status-filter').value;
   const tb=document.getElementById('am-tbody');tb.innerHTML='';let idx=1;
   const branches=bf?[bf]:Object.keys(branchData).sort();
   branches.forEach(branch=>Object.keys(branchData[branch]).sort().forEach(brand=>branchData[branch][brand].forEach((entry,i)=>{
-    if(sf==='done'&&!entry.done)return;
-    if(sf==='pending'&&entry.done)return;
-    if(sf==='commented'&&!entry.amComment)return;
+    if(sf==='done'&&!entry.done)return;if(sf==='pending'&&entry.done)return;if(sf==='commented'&&!entry.amComment)return;
     const row=allRows[entry.rowIdx],os=String(row[colMap.orderStatus]||'').trim(),pct=row[colMap.percent];
     const tr=document.createElement('tr');
     const cid=`cm_${branch.replace(/\W/g,'_')}_${brand.replace(/\W/g,'_')}_${i}`;
     tr.innerHTML=`
       <td style="color:var(--muted)">${idx++}</td>
       <td><strong>${row[colMap.orderId]||'-'}</strong></td>
-      <td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${branch}</td>
-      <td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${brand}</td>
-      <td style="color:var(--muted);white-space:nowrap;font-size:10px">${row[colMap.createdOn]||'-'}</td>
+      <td style="max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${branch}</td>
+      <td style="max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${brand}</td>
+      <td style="white-space:nowrap">${formatDate(row[colMap.createdOn])}</td>
       <td><span class="badge ${os==='Cancel'?'badge-cancel':os==='Delivered'?'badge-delivered':'badge-pending'}">${os||'-'}</span></td>
       <td style="font-weight:600">${row[colMap.value]||'-'}</td>
-      <td style="color:${pct<0?'var(--danger)':'var(--success)'}">${pct!==''?pct+'%':'-'}</td>
-      <td style="max-width:160px;color:${entry.justification?'var(--text)':'var(--muted)'}">${entry.justification||'<em style="color:var(--muted)">لم يُضف</em>'}</td>
-      <td>${entry.evidenceName?`<span style="color:var(--success)">📎 ${entry.evidenceName}</span>`:'-'}</td>
-      <td style="min-width:200px;">
+      <td style="color:${String(pct).includes('-')?'var(--danger)':'var(--success)'}">${pct!==''?pct+'%':'-'}</td>
+      <td style="max-width:150px;color:${entry.justification?'var(--text)':'var(--muted)'}">${entry.justification||'<em style="color:var(--muted)">لم يُضف</em>'}</td>
+      <td>${renderEvidenceCell(entry)}</td>
+      <td style="min-width:180px;">
         ${entry.amComment?`<div class="comment-bubble"><div class="cm-author">💬 تعليقك</div><div class="cm-text">${entry.amComment}</div></div>`:''}
         <textarea id="${cid}" class="inline-input" placeholder="اكتب تعليقك..." style="margin-top:4px;min-height:50px;">${entry.amComment||''}</textarea>
       </td>
-      <td>
-        <div style="display:flex;flex-direction:column;gap:5px;min-width:90px;">
-          <button class="btn btn-success" style="padding:5px 10px;font-size:10px;" onclick="saveAmComment('${branch}','${brand}',${i},'${cid}')">💾 حفظ</button>
-        </div>
-      </td>`;
+      <td><button class="btn btn-success" style="padding:5px 10px;font-size:10px;" onclick="saveAmComment('${branch}','${brand}',${i},'${cid}')">💾 حفظ</button></td>`;
     tb.appendChild(tr);
   })));
 }
-
 async function saveAmComment(branch,brand,i,cid){
   const txt=document.getElementById(cid).value.trim();
-  const entry=branchData[branch][brand][i];
-  entry.amComment=txt;
-  if(entry.dbId){
-    await sb.patch('ds_entries',`id=eq.${entry.dbId}`,{am_comment:txt});
-  }
-  renderAmDashboard();
-  renderMgrTable();
-  // flash
-  const btn=document.querySelector(`#${cid}`).nextElementSibling?.querySelector('button');
+  const entry=branchData[branch][brand][i];entry.amComment=txt;
+  if(entry.dbId)await sb.patch('ds_entries',`id=eq.${entry.dbId}`,{am_comment:txt});
+  renderAmDashboard();renderMgrTable();
 }
 
 // ─── EMPLOYEE ─────────────────────────────────────────────
 function showSuggestions(){
-  const q=document.getElementById('emp-branch-input').value.toLowerCase();
-  const w=document.getElementById('branch-suggestions');w.innerHTML='';
+  const q=document.getElementById('emp-branch-input').value.toLowerCase(),w=document.getElementById('branch-suggestions');w.innerHTML='';
   if(!q)return;
   Object.keys(branchData).filter(b=>b.toLowerCase().includes(q)).slice(0,8).forEach(b=>{
     const c=document.createElement('div');c.className='branch-chip';c.style.cssText='padding:5px 11px;font-size:11px;';
     c.textContent=b;c.onclick=()=>{document.getElementById('emp-branch-input').value=b;w.innerHTML='';};w.appendChild(c);
   });
 }
-
 function empLogin(){
-  const val=document.getElementById('emp-branch-input').value.trim();
-  const err=document.getElementById('emp-err');
+  const val=document.getElementById('emp-branch-input').value.trim(),err=document.getElementById('emp-err');
   if(!val){err.textContent='❌ ادخل اسم الفرع';err.style.display='';return;}
   if(!allRows.length){err.textContent='❌ المدير لم يرفع الشيت بعد';err.style.display='';return;}
   const m=Object.keys(branchData).find(b=>b.toLowerCase()===val.toLowerCase()||b.toLowerCase().includes(val.toLowerCase())||val.toLowerCase().includes(b.toLowerCase()));
   if(!m){err.textContent=`❌ لم يُوجد فرع "${val}"`;err.style.display='';return;}
   err.style.display='none';currentBranch=m;renderEmpDashboard();show('screen-employee');
 }
-
 function renderEmpDashboard(){
   const all=Object.values(branchData[currentBranch]).flat(),done=all.filter(e=>e.done).length;
   document.getElementById('emp-title').textContent=`فرع: ${currentBranch}`;
@@ -699,13 +747,13 @@ function renderEmpDashboard(){
     hdr.innerHTML=`<div style="font-size:13px;font-weight:600;">🏷️ ${brand}</div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:10px;color:var(--muted)">${bd}/${entries.length}</span>
-        <span class="badge ${bd===entries.length?'badge-done':'badge-pending'}">${bd===entries.length?'✓ مكتمل':'انتظار'}</span>
+        <span class="badge ${bd===entries.length?'badge-done':'badge-pending'}">${bd===entries.length?'✓':'انتظار'}</span>
         <span style="color:var(--muted);font-size:11px" id="tog-${bk}">▲</span>
       </div>`;
     hdr.onclick=()=>{const b=document.getElementById(`body-${bk}`),t=document.getElementById(`tog-${bk}`),o=b.style.display!=='none';b.style.display=o?'none':'';t.textContent=o?'▼':'▲';};
     const body=document.createElement('div');body.className='brand-body';body.id=`body-${bk}`;
     const tbl=document.createElement('table');
-    tbl.innerHTML=`<thead><tr><th>#</th><th>Order ID</th><th>التاريخ</th><th>Order Status</th><th>القيمة</th><th>%</th><th>Comp Status</th><th>تعليق AM</th><th>التبرير</th><th>الدليل</th><th>✓</th></tr></thead>`;
+    tbl.innerHTML=`<thead><tr><th>#</th><th>Order ID</th><th>التاريخ</th><th>Order Status</th><th>القيمة</th><th>%</th><th>Comp Status</th><th>تعليق AM</th><th>التبرير</th><th>الدليل (رابط أو ملف)</th><th>✓ تم</th></tr></thead>`;
     const tb=document.createElement('tbody');
     entries.forEach((entry,i)=>{
       const row=allRows[entry.rowIdx],os=String(row[colMap.orderStatus]||'').trim(),pct=row[colMap.percent],cs=String(row[colMap.compStatus]||'').trim();
@@ -713,23 +761,24 @@ function renderEmpDashboard(){
       tr.innerHTML=`
         <td style="color:var(--muted)">${i+1}</td>
         <td><strong>${row[colMap.orderId]||'-'}</strong></td>
-        <td style="color:var(--muted);white-space:nowrap;font-size:10px">${row[colMap.createdOn]||'-'}</td>
+        <td style="white-space:nowrap">${formatDate(row[colMap.createdOn])}</td>
         <td><span class="badge ${os==='Cancel'?'badge-cancel':os==='Delivered'?'badge-delivered':'badge-pending'}">${os||'-'}</span></td>
         <td style="font-weight:600">${row[colMap.value]||'-'}</td>
-        <td style="color:${pct<0?'var(--danger)':'var(--success)'}">${pct!==''?pct+'%':'-'}</td>
+        <td style="color:${String(pct).includes('-')?'var(--danger)':'var(--success)'}">${pct!==''?pct+'%':'-'}</td>
         <td style="font-size:10px">${cs||'-'}</td>
-        <td>${entry.amComment?`<div class="comment-bubble" style="min-width:120px"><div class="cm-author">💬 AM</div><div class="cm-text">${entry.amComment}</div></div>`:'-'}</td>
-        <td><input class="inline-input" type="text" placeholder="اكتب التبرير..." value="${entry.justification}" ${entry.done?'disabled':''} style="min-width:140px;" onchange="updateJust('${brand}',${i},this.value)"></td>
-        <td>
-          <label class="file-label" ${entry.done?'style="pointer-events:none;opacity:.4"':''}>
-            📎 ${entry.evidenceName||'رفع دليل'}
-            <input type="file" style="display:none;" accept="image/*,.pdf,.doc,.docx" onchange="handleEvidence('${brand}',${i},this)" ${entry.done?'disabled':''}>
+        <td>${entry.amComment?`<div class="comment-bubble"><div class="cm-author">💬 AM</div><div class="cm-text">${entry.amComment}</div></div>`:'-'}</td>
+        <td><input class="inline-input" type="text" placeholder="اكتب التبرير..." value="${entry.justification}" style="min-width:130px;" onchange="updateJust('${brand}',${i},this.value)"></td>
+        <td style="min-width:160px;">
+          <input class="inline-input" type="text" id="url-${bk}-${i}" placeholder="https://... أو ارفع ملف" value="${entry.evidenceUrl||''}" style="margin-bottom:4px;" onchange="updateEvidenceUrl('${brand}',${i},this.value)">
+          <label class="file-label">
+            📎 ${entry.evidenceName||'رفع ملف'}
+            <input type="file" style="display:none;" accept="image/*,.pdf,.doc,.docx" onchange="handleEvidence('${brand}',${i},this)">
           </label>
-          ${entry.evidenceName?`<div style="font-size:9px;color:var(--success);margin-top:2px">✓ ${entry.evidenceName}</div>`:''}
+          ${entry.evidenceName&&!entry.evidenceUrl?`<div style="font-size:9px;color:var(--success);margin-top:2px">✓ ${entry.evidenceName}</div>`:''}
         </td>
         <td>
-          <button class="btn ${entry.done?'btn-ghost':'btn-primary'}" style="padding:5px 10px;font-size:10px;" onclick="markDone('${brand}',${i})" ${entry.done?'disabled':''}>
-            ${entry.done?'✓':'تم'}
+          <button class="btn ${entry.done?'btn-ghost':'btn-success'}" style="padding:5px 10px;font-size:10px;white-space:nowrap;" onclick="markDone('${brand}',${i})">
+            ${entry.done?'✓ تم':'تم ✓'}
           </button>
         </td>`;
       tb.appendChild(tr);
@@ -737,38 +786,31 @@ function renderEmpDashboard(){
     tbl.appendChild(tb);body.appendChild(tbl);sec.appendChild(hdr);sec.appendChild(body);cont.appendChild(sec);
   });
 }
-
 function updateJust(brand,i,val){branchData[currentBranch][brand][i].justification=val;}
-
+function updateEvidenceUrl(brand,i,val){branchData[currentBranch][brand][i].evidenceUrl=val;if(val)branchData[currentBranch][brand][i].evidenceName=val;}
 function handleEvidence(brand,i,input){
   const file=input.files[0];if(!file)return;
   branchData[currentBranch][brand][i].evidenceName=file.name;
+  branchData[currentBranch][brand][i].evidenceUrl='';
   const r=new FileReader();r.onload=e=>{branchData[currentBranch][brand][i].evidence=e.target.result;renderEmpDashboard();};r.readAsDataURL(file);
 }
-
 async function markDone(brand,i){
   const entry=branchData[currentBranch][brand][i];
-  if(!entry.justification.trim()){alert('❗ يرجى كتابة التبرير أولاً');return;}
-  entry.done=true;
-  if(entry.dbId)await sb.patch('ds_entries',`id=eq.${entry.dbId}`,{justification:entry.justification,evidence_name:entry.evidenceName||'',done:true});
+  // No restriction — can mark done anytime
+  entry.done=!entry.done;
+  if(entry.dbId)await sb.patch('ds_entries',`id=eq.${entry.dbId}`,{justification:entry.justification,evidence_name:entry.evidenceName||'',evidence_url:entry.evidenceUrl||'',done:entry.done});
   renderEmpDashboard();renderMgrStats();renderMgrBranchChips();
 }
-
 async function saveEmpWork(){
-  const all=Object.values(branchData[currentBranch]).flat();
-  const missing=all.filter(e=>!e.done&&!e.justification.trim());
   const msg=document.getElementById('emp-save-msg');
-  if(missing.length){msg.innerHTML=`<div class="alert alert-error">❌ ${missing.length} طلب بدون تبرير</div>`;setTimeout(()=>msg.innerHTML='',4000);return;}
   setLoad('جاري الحفظ...');
-  for(const [brand,entries] of Object.entries(branchData[currentBranch])){
+  for(const[brand,entries]of Object.entries(branchData[currentBranch])){
     for(const e of entries){
-      if(e.justification&&!e.done)e.done=true;
-      if(e.dbId&&e.justification)await sb.patch('ds_entries',`id=eq.${e.dbId}`,{justification:e.justification,evidence_name:e.evidenceName||'',done:e.done});
+      if(e.dbId)await sb.patch('ds_entries',`id=eq.${e.dbId}`,{justification:e.justification,evidence_name:e.evidenceName||'',evidence_url:e.evidenceUrl||'',done:e.done});
     }
   }
   hideLoad();renderEmpDashboard();renderMgrStats();renderMgrBranchChips();
-  msg.innerHTML=`<div class="alert alert-success">✅ تم الحفظ — المدير ومدير الحسابات يشوفون عملك الحين</div>`;
-  setTimeout(()=>msg.innerHTML='',5000);
+  msg.innerHTML=`<div class="alert alert-success">✅ تم الحفظ</div>`;setTimeout(()=>msg.innerHTML='',4000);
 }
 
 // ─── DOWNLOAD ─────────────────────────────────────────────
@@ -778,10 +820,9 @@ function downloadResult(){
   const or=allRows.map(r=>[...r]);
   const jI=oh.length-3,eI=oh.length-2,cI=oh.length-1;
   Object.values(branchData).forEach(b=>Object.values(b).forEach(e=>e.forEach(x=>{
-    const r=or[x.rowIdx];
-    while(r.length<=cI)r.push('');
+    const r=or[x.rowIdx];while(r.length<=cI)r.push('');
     if(x.justification)r[jI]=x.justification;
-    if(x.evidenceName)r[eI]=x.evidenceName;
+    if(x.evidenceUrl||x.evidenceName)r[eI]=x.evidenceUrl||x.evidenceName;
     if(x.amComment)r[cI]=x.amComment;
   })));
   const ws=XLSX.utils.aoa_to_sheet([oh,...or]);
