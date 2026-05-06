@@ -1,3 +1,793 @@
-alter table ds_entries add column if not exists am_comment text default '';
-alter table ds_entries add column if not exists am_status text default '';
-alter table ds_sheet add column if not exists gs_url text default '';
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DS Compensation Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#0a0f1e;--surface:#111827;--surface2:#1a2235;--border:#1e2d45;--accent:#3b82f6;--accent2:#06b6d4;--text:#e2e8f0;--muted:#64748b;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--purple:#8b5cf6;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 10%,rgba(59,130,246,.08) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 80% 80%,rgba(6,182,212,.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
+.page{position:relative;z-index:1;}
+header{padding:14px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,30,.85);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;}
+.logo-dot{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;}
+.screen{display:none;min-height:calc(100vh - 57px);padding:36px 24px;max-width:1200px;margin:0 auto;animation:fadeUp .3s ease;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:18px;}
+.card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:16px;}
+.hero{text-align:center;padding:20px 0 6px;}
+.hero h1{font-size:32px;font-weight:700;letter-spacing:-1px;background:linear-gradient(135deg,#fff 40%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{color:var(--muted);font-size:13px;margin-top:7px;}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px;}
+.role-card{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:28px 20px;cursor:pointer;transition:all .22s;text-align:center;}
+.role-card:hover{border-color:var(--accent);background:var(--surface2);transform:translateY(-3px);box-shadow:0 16px 32px rgba(59,130,246,.1);}
+.role-icon{font-size:34px;margin-bottom:12px;display:block;}
+.role-title{font-size:15px;font-weight:600;margin-bottom:4px;}
+.role-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+.field{margin-bottom:16px;}
+label{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:6px;}
+input,select,textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 13px;color:var(--text);font-family:inherit;font-size:13px;transition:border-color .2s;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);}
+textarea{resize:vertical;min-height:70px;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#2563eb);color:#fff;box-shadow:0 3px 12px rgba(59,130,246,.3);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(59,130,246,.4);}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-success{background:linear-gradient(135deg,var(--success),#059669);color:#fff;}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:#fff;}
+.btn-purple{background:linear-gradient(135deg,var(--purple),#7c3aed);color:#fff;}
+.btn-full{width:100%;justify-content:center;}
+.btn:disabled{opacity:.4;pointer-events:none;}
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:36px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.upload-zone:hover{border-color:var(--accent);background:rgba(59,130,246,.03);}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;border:none;padding:0;width:100%;height:100%;}
+.stats-row{display:grid;gap:12px;margin-bottom:20px;}
+.stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;}
+.stat-val{font-size:24px;font-weight:700;color:var(--accent);}
+.stat-label{font-size:10px;color:var(--muted);margin-top:2px;}
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:11px;}
+th{background:var(--surface2);padding:10px 13px;text-align:right;font-weight:600;font-size:10px;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:10px 13px;border-bottom:1px solid rgba(30,45,69,.5);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(59,130,246,.03);}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;}
+.badge-pending{background:rgba(245,158,11,.15);color:var(--warning);}
+.badge-done{background:rgba(16,185,129,.15);color:var(--success);}
+.badge-cancel{background:rgba(239,68,68,.12);color:var(--danger);}
+.badge-delivered{background:rgba(16,185,129,.12);color:var(--success);}
+.badge-approved{background:rgba(16,185,129,.15);color:var(--success);}
+.badge-rejected{background:rgba(239,68,68,.15);color:var(--danger);}
+.alert{padding:11px 14px;border-radius:8px;font-size:12px;margin-bottom:14px;}
+.alert-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;}
+.alert-success{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;}
+.alert-info{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:#93c5fd;}
+.alert-warning{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:#fcd34d;}
+.branch-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+.branch-chip{background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:12px;font-weight:500;transition:all .18s;}
+.branch-chip:hover,.branch-chip.active{border-color:var(--accent);background:rgba(59,130,246,.1);color:var(--accent);}
+.chip-count{display:inline-block;background:rgba(59,130,246,.2);color:var(--accent);border-radius:20px;padding:1px 6px;font-size:9px;margin-right:4px;}
+.brand-section{margin-bottom:14px;}
+.brand-header{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px 8px 0 0;cursor:pointer;}
+.brand-header:hover{border-color:rgba(59,130,246,.4);}
+.brand-body{border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;}
+.inline-input{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:6px 9px;color:var(--text);font-family:inherit;font-size:11px;width:100%;transition:border-color .2s;}
+.inline-input:focus{border-color:var(--accent);outline:none;}
+.file-label{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:10px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.file-label:hover{border-color:var(--accent);color:var(--accent);}
+.loading-overlay{position:fixed;inset:0;background:rgba(10,15,30,.85);display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(4px);}
+.loading-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 44px;text-align:center;}
+.spinner{width:32px;height:32px;border:3px solid rgba(59,130,246,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Comment bubble */
+.comment-bubble{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:8px;padding:8px 12px;margin-top:6px;font-size:11px;}
+.comment-bubble .cm-author{font-weight:600;color:var(--purple);font-size:10px;margin-bottom:3px;}
+.comment-bubble .cm-text{color:var(--text);}
+.comment-bubble .cm-time{color:var(--muted);font-size:9px;margin-top:2px;}
+
+/* Google Sheet sync bar */
+.sync-bar{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;}
+.sync-dot.live{background:var(--success);box-shadow:0 0 6px var(--success);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;background:var(--surface2);border-radius:10px;padding:3px;margin-bottom:20px;}
+.tab{flex:1;padding:9px;border-radius:7px;text-align:center;cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:all .2s;}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3);}
+
+@media(max-width:600px){.role-grid{grid-template-columns:1fr}.screen{padding:18px 12px}header{padding:12px}.hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <div style="font-size:13px;color:var(--muted);" id="loading-text">جاري الاتصال...</div>
+  </div>
+</div>
+
+<header>
+  <div class="logo"><div class="logo-dot">📦</div>DS Compensation Portal</div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span id="sync-badge" style="font-size:10px;color:var(--success);display:none;">🟢 متصل</span>
+    <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px;" onclick="goHome()">🏠 الرئيسية</button>
+  </div>
+</header>
+
+<!-- HOME -->
+<div id="screen-home" class="screen active">
+  <div class="hero"><h1>بوابة التعويضات</h1><p>DS Compensation Report 2026</p></div>
+  <div id="home-banner" style="display:none;margin-top:16px;"></div>
+  <div class="role-grid">
+    <div class="role-card" onclick="show('screen-manager-login')">
+      <span class="role-icon">👨‍💼</span>
+      <div class="role-title">المدير</div>
+      <div class="role-desc">رفع الشيت وتتبع الفروع</div>
+    </div>
+    <div class="role-card" onclick="show('screen-am-login')">
+      <span class="role-icon">📊</span>
+      <div class="role-title">مدير الحسابات</div>
+      <div class="role-desc">مراجعة النتائج والتعليق على الطلبات</div>
+    </div>
+    <div class="role-card" onclick="show('screen-employee-login')">
+      <span class="role-icon">🏪</span>
+      <div class="role-title">الموظف / الفرع</div>
+      <div class="role-desc">رفع التبريرات والأدلة</div>
+    </div>
+  </div>
+</div>
+
+<!-- MANAGER LOGIN -->
+<div id="screen-manager-login" class="screen">
+  <div class="card" style="max-width:380px;margin:44px auto;">
+    <div class="card-title">دخول المدير</div>
+    <div id="mgr-err" class="alert alert-error" style="display:none"></div>
+    <div class="field"><label>كلمة السر</label><input type="password" id="mgr-pass" placeholder="admin123" onkeydown="if(event.key==='Enter')mgrLogin()"></div>
+    <button class="btn btn-primary btn-full" onclick="mgrLogin()">دخول</button>
+    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:12px;">الافتراضية: <b style="color:var(--accent)">admin123</b></p>
+  </div>
+</div>
+
+<!-- AM LOGIN -->
+<div id="screen-am-login" class="screen">
+  <div class="card" style="max-width:380px;margin:44px auto;">
+    <div class="card-title">دخول مدير الحسابات</div>
+    <div id="am-err" class="alert alert-error" style="display:none"></div>
+    <div class="field"><label>كلمة السر</label><input type="password" id="am-pass" placeholder="am123" onkeydown="if(event.key==='Enter')amLogin()"></div>
+    <button class="btn btn-purple btn-full" onclick="amLogin()">دخول</button>
+    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:12px;">الافتراضية: <b style="color:var(--purple)">am123</b></p>
+  </div>
+</div>
+
+<!-- MANAGER DASHBOARD -->
+<div id="screen-manager" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;">
+    <div><h2 style="font-size:19px;font-weight:700;">لوحة المدير</h2><p style="color:var(--muted);font-size:11px;margin-top:2px;" id="mgr-sheet-info">لا يوجد شيت</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-ghost" id="btn-dl" style="display:none;font-size:11px;" onclick="downloadResult()">⬇️ تحميل</button>
+      <button class="btn btn-danger" id="btn-clear" style="display:none;font-size:11px;padding:8px 12px;" onclick="clearData()">🗑️ مسح</button>
+    </div>
+  </div>
+
+  <!-- Google Sheet Sync -->
+  <div class="card">
+    <div class="card-title">🔗 ربط Google Sheet (مزامنة تلقائية)</div>
+    <div class="sync-bar" id="gs-sync-bar">
+      <div class="sync-dot" id="gs-dot"></div>
+      <div style="flex:1;">
+        <div style="font-size:12px;font-weight:600;" id="gs-status-text">لا يوجد ربط</div>
+        <div style="font-size:10px;color:var(--muted);" id="gs-last-sync"></div>
+      </div>
+      <button class="btn btn-ghost" style="font-size:11px;padding:7px 12px;" onclick="toggleGsPanel()">⚙️ إعداد</button>
+      <button class="btn btn-success" id="btn-sync-now" style="font-size:11px;padding:7px 12px;display:none;" onclick="syncGoogleSheet()">🔄 مزامنة الآن</button>
+    </div>
+    <div id="gs-panel" style="display:none;margin-top:14px;">
+      <div class="alert alert-info" style="margin-bottom:12px;">
+        📋 <strong>كيف تحصل على رابط CSV:</strong> في Google Sheet ← File ← Share ← Publish to web ← اختر الشيت ← CSV ← Publish ← انسخ الرابط
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+        <div class="field" style="flex:1;margin:0;">
+          <label>رابط Google Sheet (CSV)</label>
+          <input type="text" id="gs-url" placeholder="https://docs.google.com/spreadsheets/d/.../export?format=csv">
+        </div>
+        <button class="btn btn-primary" style="font-size:12px;" onclick="connectGoogleSheet()">ربط</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;">
+        <label style="margin:0;display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" id="gs-auto" style="width:auto;" onchange="toggleAutoSync()">
+          <span style="font-size:12px;color:var(--text);">مزامنة تلقائية كل</span>
+        </label>
+        <select id="gs-interval" style="width:auto;font-size:12px;padding:6px 10px;" onchange="updateInterval()">
+          <option value="60000">دقيقة</option>
+          <option value="300000">5 دقائق</option>
+          <option value="600000">10 دقائق</option>
+          <option value="1800000">30 دقيقة</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manual Upload -->
+  <div class="card">
+    <div class="card-title" id="upload-label">أو رفع شيت يدوي</div>
+    <div class="upload-zone">
+      <input type="file" accept=".xlsx,.xls,.csv" onchange="handleFile(event)">
+      <div style="font-size:28px;margin-bottom:8px;">📊</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:4px;">اسحب الشيت هنا أو اضغط للاختيار</div>
+      <div style="font-size:11px;color:var(--muted);">xlsx · xls · csv</div>
+    </div>
+    <div id="upload-msg" style="margin-top:12px;"></div>
+  </div>
+
+  <div id="mgr-content" style="display:none;">
+    <div class="stats-row" style="grid-template-columns:repeat(4,1fr);" id="mgr-stats-row"></div>
+    <div class="card">
+      <div class="card-title">تصفية حسب الفرع</div>
+      <div class="branch-grid" id="mgr-branch-chips"></div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <div class="card-title" style="margin:0;">الطلبات</div>
+        <select id="mgr-status-filter" onchange="renderMgrTable()" style="max-width:150px;font-size:12px;">
+          <option value="">كل الحالات</option>
+          <option value="pending">في الانتظار</option>
+          <option value="done">مكتمل</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr>
+          <th>#</th><th>Order ID</th><th>الفرع</th><th>البراند</th><th>التاريخ</th>
+          <th>Order Status</th><th>القيمة</th><th>%</th><th>Comp Status</th>
+          <th>التبرير</th><th>الدليل</th><th>تعليق AM</th><th>المعالجة</th>
+        </tr></thead>
+          <tbody id="mgr-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AM DASHBOARD -->
+<div id="screen-am" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;">
+    <div><h2 style="font-size:19px;font-weight:700;">لوحة مدير الحسابات</h2><p style="color:var(--muted);font-size:11px;margin-top:2px;">مراجعة التبريرات والتعليق عليها</p></div>
+  </div>
+
+  <div class="stats-row" style="grid-template-columns:repeat(4,1fr);" id="am-stats-row"></div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <div class="card-title" style="margin:0;">الطلبات</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <select id="am-branch-filter" onchange="renderAmTable()" style="max-width:160px;font-size:12px;">
+          <option value="">كل الفروع</option>
+        </select>
+        <select id="am-status-filter" onchange="renderAmTable()" style="max-width:150px;font-size:12px;">
+          <option value="">كل الحالات</option>
+          <option value="done">مكتمل (لديه تبرير)</option>
+          <option value="pending">في الانتظار</option>
+          <option value="commented">علّقت عليه</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table><thead><tr>
+        <th>#</th><th>Order ID</th><th>الفرع</th><th>البراند</th><th>التاريخ</th>
+        <th>Order Status</th><th>القيمة</th><th>%</th><th>التبرير</th><th>الدليل</th><th>تعليقي</th><th>إجراء</th>
+      </tr></thead>
+        <tbody id="am-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- EMPLOYEE LOGIN -->
+<div id="screen-employee-login" class="screen">
+  <div class="card" style="max-width:400px;margin:44px auto;">
+    <div class="card-title">دخول الموظف</div>
+    <div id="emp-err" class="alert alert-error" style="display:none"></div>
+    <div id="emp-no-data" class="alert alert-info" style="display:none">⚠️ المدير لم يرفع الشيت بعد.</div>
+    <div class="field">
+      <label>اسم الفرع</label>
+      <input type="text" id="emp-branch-input" placeholder="ابدأ بالكتابة..." oninput="showSuggestions()" onkeydown="if(event.key==='Enter')empLogin()">
+      <div id="branch-suggestions" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;"></div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="empLogin()">دخول</button>
+  </div>
+</div>
+
+<!-- EMPLOYEE DASHBOARD -->
+<div id="screen-employee" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div><h2 style="font-size:19px;font-weight:700;" id="emp-title">طلباتي</h2><p style="color:var(--muted);font-size:11px;margin-top:2px;" id="emp-sub"></p></div>
+    <button class="btn btn-success" onclick="saveEmpWork()">💾 حفظ وإرسال</button>
+  </div>
+  <div id="emp-save-msg"></div>
+  <div class="stats-row" style="grid-template-columns:repeat(3,1fr);" id="emp-stats-row"></div>
+  <div id="emp-brands-container"></div>
+</div>
+
+</div>
+<script>
+// ─── SUPABASE ─────────────────────────────────────────────
+const SB_URL='https://vhgsduhxrdvtydhqanma.supabase.co';
+const SB_KEY='sb_publishable_FNOF9ml-WkerJXZg2GHVCw_wp2t3wcy';
+const SBH={headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}};
+const sb={
+  async get(t,q=''){const r=await fetch(`${SB_URL}/rest/v1/${t}?${q}`,SBH);return r.json();},
+  async post(t,b,prefer='return=representation'){const r=await fetch(`${SB_URL}/rest/v1/${t}`,{method:'POST',headers:{...SBH.headers,'Prefer':prefer},body:JSON.stringify(b)});return r.json();},
+  async patch(t,q,b){const r=await fetch(`${SB_URL}/rest/v1/${t}?${q}`,{method:'PATCH',headers:{...SBH.headers,'Prefer':'return=representation'},body:JSON.stringify(b)});return r.json();},
+  async del(t,q){await fetch(`${SB_URL}/rest/v1/${t}?${q}`,{method:'DELETE',headers:SBH.headers});}
+};
+
+// ─── STATE ────────────────────────────────────────────────
+let allRows=[],sheetHeaders=[],colMap={};
+let branchData={};
+let currentBranch=null,mgrSelBranch='',sheetId=null;
+let gsUrl='',gsTimer=null;
+
+// ─── INIT ─────────────────────────────────────────────────
+window.addEventListener('load',async()=>{
+  setLoad('جاري الاتصال...');
+  try{
+    await loadSheet();
+    // restore gs url
+    const gsSaved=await sb.get('ds_sheet','order=id.desc&limit=1');
+    if(gsSaved&&gsSaved[0]&&gsSaved[0].gs_url){
+      gsUrl=gsSaved[0].gs_url;
+      document.getElementById('gs-url').value=gsUrl;
+      updateSyncBar(true);
+    }
+    document.getElementById('sync-badge').style.display='';
+  }catch(e){console.error(e);}
+  hideLoad();
+});
+
+async function loadSheet(){
+  const rows=await sb.get('ds_sheet','order=id.desc&limit=1');
+  if(!rows||!rows.length)return;
+  const s=rows[0]; sheetId=s.id; sheetHeaders=s.headers; allRows=s.rows;
+  if(s.gs_url){gsUrl=s.gs_url;}
+  detectCols();
+  const entries=await sb.get('ds_entries','order=row_idx.asc');
+  buildBranchData();
+  if(entries&&entries.length){
+    entries.forEach(e=>{
+      const b=e.branch,br=e.brand;
+      if(!branchData[b]||!branchData[b][br])return;
+      const f=branchData[b][br].find(x=>x.rowIdx===e.row_idx);
+      if(f){f.justification=e.justification||'';f.evidenceName=e.evidence_name||'';f.done=e.done||false;f.dbId=e.id;f.amComment=e.am_comment||'';f.amStatus=e.am_status||'';}
+    });
+  }
+  const now=new Date(s.uploaded_at).toLocaleDateString('ar-SA');
+  document.getElementById('home-banner').innerHTML=`<div class="alert alert-success">✅ <strong>${s.filename||'Google Sheet'}</strong> — ${allRows.length} طلب — ${now}</div>`;
+  document.getElementById('home-banner').style.display='';
+  document.getElementById('mgr-sheet-info').textContent=`${s.filename||'Google Sheet'} · ${allRows.length} طلب`;
+  document.getElementById('mgr-content').style.display='';
+  document.getElementById('btn-dl').style.display='';
+  document.getElementById('btn-clear').style.display='';
+  refreshMgrView();
+  populateAmBranchFilter();
+}
+
+// ─── NAV ──────────────────────────────────────────────────
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='screen-employee-login'){const nd=!allRows.length;document.getElementById('emp-no-data').style.display=nd?'':'none';document.getElementById('emp-branch-input').disabled=nd;}}
+function goHome(){show('screen-home');}
+function setLoad(t){document.getElementById('loading-text').textContent=t;document.getElementById('loading-overlay').style.display='';}
+function hideLoad(){document.getElementById('loading-overlay').style.display='none';}
+
+// ─── LOGINS ───────────────────────────────────────────────
+function mgrLogin(){const p=document.getElementById('mgr-pass').value,e=document.getElementById('mgr-err');if(p!=='admin123'){e.textContent='❌ كلمة السر خاطئة';e.style.display='';return;}e.style.display='none';show('screen-manager');}
+function amLogin(){const p=document.getElementById('am-pass').value,e=document.getElementById('am-err');if(p!=='am123'){e.textContent='❌ كلمة السر خاطئة';e.style.display='';return;}e.style.display='none';renderAmDashboard();show('screen-am');}
+
+// ─── GOOGLE SHEET SYNC ────────────────────────────────────
+function toggleGsPanel(){const p=document.getElementById('gs-panel');p.style.display=p.style.display==='none'?'':'none';}
+
+async function connectGoogleSheet(){
+  const url=document.getElementById('gs-url').value.trim();
+  if(!url){alert('❗ ادخل الرابط');return;}
+  gsUrl=url;
+  await syncGoogleSheet();
+}
+
+async function syncGoogleSheet(){
+  if(!gsUrl)return;
+  setLoad('جاري المزامنة مع Google Sheet...');
+  try{
+    const resp=await fetch(gsUrl);
+    if(!resp.ok)throw new Error('تعذّر الاتصال بالشيت');
+    const csv=await resp.text();
+    parseCSVAndLoad(csv,'Google Sheet');
+    updateSyncBar(true);
+    document.getElementById('gs-last-sync').textContent='آخر مزامنة: '+new Date().toLocaleTimeString('ar-SA');
+    document.getElementById('btn-sync-now').style.display='';
+  }catch(e){
+    hideLoad();
+    alert('❌ خطأ في المزامنة: '+e.message+'\n\nتأكد أن الشيت منشور (Published to web)');
+    return;
+  }
+  hideLoad();
+}
+
+function toggleAutoSync(){
+  const on=document.getElementById('gs-auto').checked;
+  if(gsTimer){clearInterval(gsTimer);gsTimer=null;}
+  if(on&&gsUrl){
+    const interval=parseInt(document.getElementById('gs-interval').value);
+    gsTimer=setInterval(syncGoogleSheet,interval);
+  }
+}
+
+function updateInterval(){if(document.getElementById('gs-auto').checked){toggleAutoSync();toggleAutoSync();}}
+
+function updateSyncBar(connected){
+  document.getElementById('gs-dot').className='sync-dot'+(connected?' live':'');
+  document.getElementById('gs-status-text').textContent=connected?`مرتبط بـ Google Sheet`:'لا يوجد ربط';
+  if(connected)document.getElementById('btn-sync-now').style.display='';
+}
+
+function parseCSVAndLoad(csv,filename){
+  const lines=csv.split('\n').filter(l=>l.trim());
+  if(lines.length<2)throw new Error('البيانات فارغة');
+  const parseRow=line=>{const r=[];let cur='',inQ=false;for(let c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){r.push(cur.trim());cur='';}else cur+=c;}r.push(cur.trim());return r;};
+  sheetHeaders=parseRow(lines[0]);
+  allRows=lines.slice(1).map(l=>parseRow(l)).filter(r=>r.some(c=>c!==''));
+  detectCols();
+  buildBranchData();
+  saveSheetToSupabase(filename);
+}
+
+async function saveSheetToSupabase(filename){
+  if(sheetId){
+    await sb.del('ds_entries','row_idx=gte.0');
+    await sb.del('ds_sheet',`id=eq.${sheetId}`);
+  }
+  const ins=await sb.post('ds_sheet',{filename,headers:sheetHeaders,rows:allRows,gs_url:gsUrl});
+  sheetId=ins[0]?.id;
+  const arr=[];
+  Object.keys(branchData).forEach(branch=>Object.keys(branchData[branch]).forEach(brand=>branchData[branch][brand].forEach(e=>arr.push({row_idx:e.rowIdx,branch,brand,justification:'',evidence_name:'',done:false,am_comment:'',am_status:''}))));
+  if(arr.length)await sb.post('ds_entries',arr,'');
+  document.getElementById('mgr-sheet-info').textContent=`${filename} · ${allRows.length} طلب`;
+  document.getElementById('mgr-content').style.display='';
+  document.getElementById('btn-dl').style.display='';
+  document.getElementById('btn-clear').style.display='';
+  document.getElementById('home-banner').innerHTML=`<div class="alert alert-success">✅ <strong>${filename}</strong> — ${allRows.length} طلب</div>`;
+  document.getElementById('home-banner').style.display='';
+  document.getElementById('sync-badge').style.display='';
+  refreshMgrView();
+  populateAmBranchFilter();
+}
+
+// ─── FILE UPLOAD ──────────────────────────────────────────
+function handleFile(e){
+  const file=e.target.files[0];if(!file)return;
+  const msg=document.getElementById('upload-msg');
+  msg.innerHTML='<div class="alert alert-info">⏳ جاري القراءة...</div>';
+  const reader=new FileReader();
+  reader.onload=async ev=>{
+    try{
+      const wb=XLSX.read(new Uint8Array(ev.target.result),{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      if(json.length<2)throw new Error('الشيت فارغ');
+      sheetHeaders=json[0].map(h=>String(h).trim());
+      allRows=json.slice(1).filter(r=>r.some(c=>c!==''));
+      detectCols(); buildBranchData();
+      msg.innerHTML='<div class="alert alert-info">⏳ جاري الحفظ...</div>';
+      setLoad('جاري الحفظ...');
+      await saveSheetToSupabase(file.name);
+      hideLoad();
+      msg.innerHTML=`<div class="alert alert-success">✅ تم — ${allRows.length} طلب</div>`;
+    }catch(err){hideLoad();msg.innerHTML=`<div class="alert alert-error">❌ ${err.message}</div>`;}
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function detectCols(){
+  colMap={};
+  sheetHeaders.forEach((h,i)=>{
+    const l=h.toLowerCase();
+    if(h==='Order ID')colMap.orderId=i;
+    if(l.includes('users_2')||(l.includes('users')&&l.includes('2')))colMap.branch=i;
+    if(l==='users — name'||l.includes('users — name'))colMap.brand=i;
+    if(l.includes('created on')&&!l.includes('requested'))colMap.createdOn=i;
+    if(l==='value'||l==='val')colMap.value=i;
+    if(l.includes('compensation st'))colMap.compStatus=i;
+    if(l==='%')colMap.percent=i;
+    if(l.includes('order sta')||l==='order status')colMap.orderStatus=i;
+  });
+  if(colMap.branch===undefined)colMap.branch=2;
+  if(colMap.brand===undefined)colMap.brand=3;
+  if(colMap.orderId===undefined)colMap.orderId=1;
+  if(colMap.value===undefined)colMap.value=11;
+  if(colMap.compStatus===undefined)colMap.compStatus=12;
+}
+
+function buildBranchData(){
+  branchData={};
+  allRows.forEach((row,idx)=>{
+    const branch=String(row[colMap.branch]||'').trim();
+    const brand=String(row[colMap.brand]||'').trim();
+    if(!branch)return;
+    if(!branchData[branch])branchData[branch]={};
+    if(!branchData[branch][brand])branchData[branch][brand]=[];
+    branchData[branch][brand].push({rowIdx:idx,justification:'',evidenceName:'',done:false,dbId:null,amComment:'',amStatus:''});
+  });
+}
+
+// ─── MANAGER VIEW ─────────────────────────────────────────
+function refreshMgrView(){renderMgrStats();renderMgrBranchChips();renderMgrTable();}
+
+function renderMgrStats(){
+  let total=0,done=0;
+  Object.values(branchData).forEach(b=>Object.values(b).forEach(e=>e.forEach(x=>{total++;if(x.done)done++;})));
+  document.getElementById('mgr-stats-row').innerHTML=`
+    <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-label">إجمالي</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--success)">${done}</div><div class="stat-label">مكتمل</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--warning)">${total-done}</div><div class="stat-label">انتظار</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--accent2)">${Object.keys(branchData).length}</div><div class="stat-label">فروع</div></div>`;
+}
+
+function renderMgrBranchChips(){
+  const w=document.getElementById('mgr-branch-chips');
+  w.innerHTML=`<div class="branch-chip ${!mgrSelBranch?'active':''}" onclick="mgrSel('')">الكل</div>`;
+  Object.keys(branchData).sort().forEach(b=>{
+    const e=Object.values(branchData[b]).flat(),d=e.filter(x=>x.done).length;
+    const c=document.createElement('div');c.className='branch-chip'+(mgrSelBranch===b?' active':'');
+    c.innerHTML=`${b} <span class="chip-count">${d}/${e.length}</span>`;c.onclick=()=>mgrSel(b);w.appendChild(c);
+  });
+}
+function mgrSel(b){mgrSelBranch=b;renderMgrBranchChips();renderMgrTable();}
+
+function renderMgrTable(){
+  const sf=document.getElementById('mgr-status-filter').value;
+  const tb=document.getElementById('mgr-tbody');tb.innerHTML='';let idx=1;
+  const branches=mgrSelBranch?[mgrSelBranch]:Object.keys(branchData).sort();
+  branches.forEach(branch=>Object.keys(branchData[branch]).sort().forEach(brand=>branchData[branch][brand].forEach(entry=>{
+    if(sf==='pending'&&entry.done)return;if(sf==='done'&&!entry.done)return;
+    const row=allRows[entry.rowIdx],os=String(row[colMap.orderStatus]||'').trim(),pct=row[colMap.percent],cs=String(row[colMap.compStatus]||'').trim();
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td style="color:var(--muted)">${idx++}</td>
+      <td><strong>${row[colMap.orderId]||'-'}</strong></td>
+      <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${branch}</td>
+      <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${brand}</td>
+      <td style="color:var(--muted);white-space:nowrap">${row[colMap.createdOn]||'-'}</td>
+      <td><span class="badge ${os==='Cancel'?'badge-cancel':os==='Delivered'?'badge-delivered':'badge-pending'}">${os||'-'}</span></td>
+      <td style="font-weight:600">${row[colMap.value]||'-'}</td>
+      <td style="color:${pct<0?'var(--danger)':'var(--success)'}">${pct!==''?pct+'%':'-'}</td>
+      <td>${cs||'-'}</td>
+      <td style="max-width:150px;color:${entry.justification?'var(--text)':'var(--muted)'}">${entry.justification||'<em>لم يُضف</em>'}</td>
+      <td>${entry.evidenceName?`<span style="color:var(--success)">📎 ${entry.evidenceName}</span>`:'-'}</td>
+      <td>${entry.amComment?`<div class="comment-bubble"><div class="cm-author">💬 AM</div><div class="cm-text">${entry.amComment}</div></div>`:'-'}</td>
+      <td><span class="badge ${entry.done?'badge-done':'badge-pending'}">${entry.done?'✓ مكتمل':'انتظار'}</span></td>`;
+    tb.appendChild(tr);
+  })));
+}
+
+async function clearData(){
+  if(!confirm('مسح كل البيانات؟'))return;
+  setLoad('جاري المسح...');
+  await sb.del('ds_entries','row_idx=gte.0');
+  if(sheetId)await sb.del('ds_sheet',`id=eq.${sheetId}`);
+  allRows=[];sheetHeaders=[];branchData={};sheetId=null;gsUrl='';
+  if(gsTimer){clearInterval(gsTimer);gsTimer=null;}
+  document.getElementById('mgr-content').style.display='none';
+  document.getElementById('btn-dl').style.display='none';
+  document.getElementById('btn-clear').style.display='none';
+  document.getElementById('home-banner').style.display='none';
+  document.getElementById('mgr-sheet-info').textContent='لا يوجد شيت';
+  document.getElementById('upload-msg').innerHTML='<div class="alert alert-info">🗑️ تم المسح</div>';
+  document.getElementById('sync-badge').style.display='none';
+  document.getElementById('gs-url').value='';
+  updateSyncBar(false);
+  hideLoad();
+}
+
+// ─── AM DASHBOARD ─────────────────────────────────────────
+function populateAmBranchFilter(){
+  const sel=document.getElementById('am-branch-filter');
+  sel.innerHTML='<option value="">كل الفروع</option>';
+  Object.keys(branchData).sort().forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;sel.appendChild(o);});
+}
+
+function renderAmDashboard(){
+  let total=0,done=0,commented=0,withComment=0;
+  Object.values(branchData).forEach(b=>Object.values(b).forEach(e=>e.forEach(x=>{total++;if(x.done)done++;if(x.amComment)commented++;if(x.amStatus==='approved'||x.amStatus==='rejected')withComment++;})));
+  document.getElementById('am-stats-row').innerHTML=`
+    <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-label">إجمالي</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--success)">${done}</div><div class="stat-label">لديه تبرير</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--purple)">${commented}</div><div class="stat-label">علّقت عليه</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--warning)">${total-done}</div><div class="stat-label">بدون تبرير</div></div>`;
+  renderAmTable();
+}
+
+function renderAmTable(){
+  const bf=document.getElementById('am-branch-filter').value;
+  const sf=document.getElementById('am-status-filter').value;
+  const tb=document.getElementById('am-tbody');tb.innerHTML='';let idx=1;
+  const branches=bf?[bf]:Object.keys(branchData).sort();
+  branches.forEach(branch=>Object.keys(branchData[branch]).sort().forEach(brand=>branchData[branch][brand].forEach((entry,i)=>{
+    if(sf==='done'&&!entry.done)return;
+    if(sf==='pending'&&entry.done)return;
+    if(sf==='commented'&&!entry.amComment)return;
+    const row=allRows[entry.rowIdx],os=String(row[colMap.orderStatus]||'').trim(),pct=row[colMap.percent];
+    const tr=document.createElement('tr');
+    const cid=`cm_${branch.replace(/\W/g,'_')}_${brand.replace(/\W/g,'_')}_${i}`;
+    tr.innerHTML=`
+      <td style="color:var(--muted)">${idx++}</td>
+      <td><strong>${row[colMap.orderId]||'-'}</strong></td>
+      <td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${branch}</td>
+      <td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${brand}</td>
+      <td style="color:var(--muted);white-space:nowrap;font-size:10px">${row[colMap.createdOn]||'-'}</td>
+      <td><span class="badge ${os==='Cancel'?'badge-cancel':os==='Delivered'?'badge-delivered':'badge-pending'}">${os||'-'}</span></td>
+      <td style="font-weight:600">${row[colMap.value]||'-'}</td>
+      <td style="color:${pct<0?'var(--danger)':'var(--success)'}">${pct!==''?pct+'%':'-'}</td>
+      <td style="max-width:160px;color:${entry.justification?'var(--text)':'var(--muted)'}">${entry.justification||'<em style="color:var(--muted)">لم يُضف</em>'}</td>
+      <td>${entry.evidenceName?`<span style="color:var(--success)">📎 ${entry.evidenceName}</span>`:'-'}</td>
+      <td style="min-width:200px;">
+        ${entry.amComment?`<div class="comment-bubble"><div class="cm-author">💬 تعليقك</div><div class="cm-text">${entry.amComment}</div></div>`:''}
+        <textarea id="${cid}" class="inline-input" placeholder="اكتب تعليقك..." style="margin-top:4px;min-height:50px;">${entry.amComment||''}</textarea>
+      </td>
+      <td>
+        <div style="display:flex;flex-direction:column;gap:5px;min-width:90px;">
+          <button class="btn btn-success" style="padding:5px 10px;font-size:10px;" onclick="saveAmComment('${branch}','${brand}',${i},'${cid}')">💾 حفظ</button>
+        </div>
+      </td>`;
+    tb.appendChild(tr);
+  })));
+}
+
+async function saveAmComment(branch,brand,i,cid){
+  const txt=document.getElementById(cid).value.trim();
+  const entry=branchData[branch][brand][i];
+  entry.amComment=txt;
+  if(entry.dbId){
+    await sb.patch('ds_entries',`id=eq.${entry.dbId}`,{am_comment:txt});
+  }
+  renderAmDashboard();
+  renderMgrTable();
+  // flash
+  const btn=document.querySelector(`#${cid}`).nextElementSibling?.querySelector('button');
+}
+
+// ─── EMPLOYEE ─────────────────────────────────────────────
+function showSuggestions(){
+  const q=document.getElementById('emp-branch-input').value.toLowerCase();
+  const w=document.getElementById('branch-suggestions');w.innerHTML='';
+  if(!q)return;
+  Object.keys(branchData).filter(b=>b.toLowerCase().includes(q)).slice(0,8).forEach(b=>{
+    const c=document.createElement('div');c.className='branch-chip';c.style.cssText='padding:5px 11px;font-size:11px;';
+    c.textContent=b;c.onclick=()=>{document.getElementById('emp-branch-input').value=b;w.innerHTML='';};w.appendChild(c);
+  });
+}
+
+function empLogin(){
+  const val=document.getElementById('emp-branch-input').value.trim();
+  const err=document.getElementById('emp-err');
+  if(!val){err.textContent='❌ ادخل اسم الفرع';err.style.display='';return;}
+  if(!allRows.length){err.textContent='❌ المدير لم يرفع الشيت بعد';err.style.display='';return;}
+  const m=Object.keys(branchData).find(b=>b.toLowerCase()===val.toLowerCase()||b.toLowerCase().includes(val.toLowerCase())||val.toLowerCase().includes(b.toLowerCase()));
+  if(!m){err.textContent=`❌ لم يُوجد فرع "${val}"`;err.style.display='';return;}
+  err.style.display='none';currentBranch=m;renderEmpDashboard();show('screen-employee');
+}
+
+function renderEmpDashboard(){
+  const all=Object.values(branchData[currentBranch]).flat(),done=all.filter(e=>e.done).length;
+  document.getElementById('emp-title').textContent=`فرع: ${currentBranch}`;
+  document.getElementById('emp-sub').textContent=`${all.length} طلب — ${Object.keys(branchData[currentBranch]).length} براند`;
+  document.getElementById('emp-stats-row').innerHTML=`
+    <div class="stat-card"><div class="stat-val">${all.length}</div><div class="stat-label">إجمالي</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--success)">${done}</div><div class="stat-label">مكتمل</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--warning)">${all.length-done}</div><div class="stat-label">يحتاج تبرير</div></div>`;
+  const cont=document.getElementById('emp-brands-container');cont.innerHTML='';
+  Object.keys(branchData[currentBranch]).sort().forEach(brand=>{
+    const entries=branchData[currentBranch][brand],bd=entries.filter(e=>e.done).length;
+    const bk=brand.replace(/[^a-zA-Z0-9]/g,'_');
+    const sec=document.createElement('div');sec.className='brand-section';
+    const hdr=document.createElement('div');hdr.className='brand-header';
+    hdr.innerHTML=`<div style="font-size:13px;font-weight:600;">🏷️ ${brand}</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:10px;color:var(--muted)">${bd}/${entries.length}</span>
+        <span class="badge ${bd===entries.length?'badge-done':'badge-pending'}">${bd===entries.length?'✓ مكتمل':'انتظار'}</span>
+        <span style="color:var(--muted);font-size:11px" id="tog-${bk}">▲</span>
+      </div>`;
+    hdr.onclick=()=>{const b=document.getElementById(`body-${bk}`),t=document.getElementById(`tog-${bk}`),o=b.style.display!=='none';b.style.display=o?'none':'';t.textContent=o?'▼':'▲';};
+    const body=document.createElement('div');body.className='brand-body';body.id=`body-${bk}`;
+    const tbl=document.createElement('table');
+    tbl.innerHTML=`<thead><tr><th>#</th><th>Order ID</th><th>التاريخ</th><th>Order Status</th><th>القيمة</th><th>%</th><th>Comp Status</th><th>تعليق AM</th><th>التبرير</th><th>الدليل</th><th>✓</th></tr></thead>`;
+    const tb=document.createElement('tbody');
+    entries.forEach((entry,i)=>{
+      const row=allRows[entry.rowIdx],os=String(row[colMap.orderStatus]||'').trim(),pct=row[colMap.percent],cs=String(row[colMap.compStatus]||'').trim();
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td style="color:var(--muted)">${i+1}</td>
+        <td><strong>${row[colMap.orderId]||'-'}</strong></td>
+        <td style="color:var(--muted);white-space:nowrap;font-size:10px">${row[colMap.createdOn]||'-'}</td>
+        <td><span class="badge ${os==='Cancel'?'badge-cancel':os==='Delivered'?'badge-delivered':'badge-pending'}">${os||'-'}</span></td>
+        <td style="font-weight:600">${row[colMap.value]||'-'}</td>
+        <td style="color:${pct<0?'var(--danger)':'var(--success)'}">${pct!==''?pct+'%':'-'}</td>
+        <td style="font-size:10px">${cs||'-'}</td>
+        <td>${entry.amComment?`<div class="comment-bubble" style="min-width:120px"><div class="cm-author">💬 AM</div><div class="cm-text">${entry.amComment}</div></div>`:'-'}</td>
+        <td><input class="inline-input" type="text" placeholder="اكتب التبرير..." value="${entry.justification}" ${entry.done?'disabled':''} style="min-width:140px;" onchange="updateJust('${brand}',${i},this.value)"></td>
+        <td>
+          <label class="file-label" ${entry.done?'style="pointer-events:none;opacity:.4"':''}>
+            📎 ${entry.evidenceName||'رفع دليل'}
+            <input type="file" style="display:none;" accept="image/*,.pdf,.doc,.docx" onchange="handleEvidence('${brand}',${i},this)" ${entry.done?'disabled':''}>
+          </label>
+          ${entry.evidenceName?`<div style="font-size:9px;color:var(--success);margin-top:2px">✓ ${entry.evidenceName}</div>`:''}
+        </td>
+        <td>
+          <button class="btn ${entry.done?'btn-ghost':'btn-primary'}" style="padding:5px 10px;font-size:10px;" onclick="markDone('${brand}',${i})" ${entry.done?'disabled':''}>
+            ${entry.done?'✓':'تم'}
+          </button>
+        </td>`;
+      tb.appendChild(tr);
+    });
+    tbl.appendChild(tb);body.appendChild(tbl);sec.appendChild(hdr);sec.appendChild(body);cont.appendChild(sec);
+  });
+}
+
+function updateJust(brand,i,val){branchData[currentBranch][brand][i].justification=val;}
+
+function handleEvidence(brand,i,input){
+  const file=input.files[0];if(!file)return;
+  branchData[currentBranch][brand][i].evidenceName=file.name;
+  const r=new FileReader();r.onload=e=>{branchData[currentBranch][brand][i].evidence=e.target.result;renderEmpDashboard();};r.readAsDataURL(file);
+}
+
+async function markDone(brand,i){
+  const entry=branchData[currentBranch][brand][i];
+  if(!entry.justification.trim()){alert('❗ يرجى كتابة التبرير أولاً');return;}
+  entry.done=true;
+  if(entry.dbId)await sb.patch('ds_entries',`id=eq.${entry.dbId}`,{justification:entry.justification,evidence_name:entry.evidenceName||'',done:true});
+  renderEmpDashboard();renderMgrStats();renderMgrBranchChips();
+}
+
+async function saveEmpWork(){
+  const all=Object.values(branchData[currentBranch]).flat();
+  const missing=all.filter(e=>!e.done&&!e.justification.trim());
+  const msg=document.getElementById('emp-save-msg');
+  if(missing.length){msg.innerHTML=`<div class="alert alert-error">❌ ${missing.length} طلب بدون تبرير</div>`;setTimeout(()=>msg.innerHTML='',4000);return;}
+  setLoad('جاري الحفظ...');
+  for(const [brand,entries] of Object.entries(branchData[currentBranch])){
+    for(const e of entries){
+      if(e.justification&&!e.done)e.done=true;
+      if(e.dbId&&e.justification)await sb.patch('ds_entries',`id=eq.${e.dbId}`,{justification:e.justification,evidence_name:e.evidenceName||'',done:e.done});
+    }
+  }
+  hideLoad();renderEmpDashboard();renderMgrStats();renderMgrBranchChips();
+  msg.innerHTML=`<div class="alert alert-success">✅ تم الحفظ — المدير ومدير الحسابات يشوفون عملك الحين</div>`;
+  setTimeout(()=>msg.innerHTML='',5000);
+}
+
+// ─── DOWNLOAD ─────────────────────────────────────────────
+function downloadResult(){
+  if(!allRows.length)return;
+  const oh=[...sheetHeaders,'تبرير','دليل','تعليق AM'];
+  const or=allRows.map(r=>[...r]);
+  const jI=oh.length-3,eI=oh.length-2,cI=oh.length-1;
+  Object.values(branchData).forEach(b=>Object.values(b).forEach(e=>e.forEach(x=>{
+    const r=or[x.rowIdx];
+    while(r.length<=cI)r.push('');
+    if(x.justification)r[jI]=x.justification;
+    if(x.evidenceName)r[eI]=x.evidenceName;
+    if(x.amComment)r[cI]=x.amComment;
+  })));
+  const ws=XLSX.utils.aoa_to_sheet([oh,...or]);
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Updated');
+  XLSX.writeFile(wb,`DS_Compensation_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+</script>
+</body>
+</html>
